@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd" 
+       default-init-method="myInit" default-destroy-method="myDestroy">
+      
+    <!-- Handles all kind of annotation -->
+    <context:annotation-config/> 
+    
+    <!-- Use of @Component annotation for circle class marked as Spring Bean -->
+    <context:component-scan base-package="org.kamlesh.Shapes"/>
+    
+    <!-- pointsconfig.properties implementation-->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+     <property name="location" value="/src/java/org/kamlesh/Services/pointsconfig.properties"/>
+    </bean>
+    
+    <!-- Triangle -->
+    <bean id="triangle" class="org.kamlesh.Shapes.Triangle">
+        <property name="A" ref="point1"/>
+        <property name="B" ref="point2"/>
+        <property name="C" ref="point3"/>
+    </bean> 
+    
+    <bean id="point1" class="org.kamlesh.Base.Point">
+        <property name="x" value="${A.x}"/>
+        <property name="y" value="${A.y}"/>
+    </bean>
+    
+    <bean id="point2" class="org.kamlesh.Base.Point">
+        <qualifier value="qual"/>
+        <property name="x" value="${B.x}"/>
+        <property name="y" value="${B.y}"/>
+    </bean>
+    
+    <bean id="point3" class="org.kamlesh.Base.Point">
+        <property name="x" value="${C.x}"/>
+        <property name="y" value="${C.y}"/>
+    </bean> 
+    
+    <!-- Message Source -->
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+      <property name="basenames">
+          <list>
+              <value>
+                 /src/java/org/kamlesh/Services/mymessages.properties 
+              </value>
+          </list> 
+      </property>
+    </bean>
+    <!--<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" p:driverClassName="${jdbc.driverClassName}" p:url="${jdbc.url}" p:username="${jdbc.username}" p:password="${jdbc.password}" /-->
+
+</beans>
